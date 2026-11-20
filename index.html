@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Rushabh Yeole · Systems, speed &amp; scale</title>
+  <meta name="description" content="Rushabh Yeole: backend and systems engineer in Mumbai. Zero-dependency servers, native apps, anomaly detection, and an XDP load balancer in the works.">
+  <meta name="theme-color" content="#07080a">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Rushabh Yeole · Systems, speed & scale">
+  <meta property="og:description" content="Backend & systems engineer. I build fast things, from wire protocols to dashboards.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2307080a'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial Black,Arial' font-weight='900' font-size='30' fill='%23c6ff3d'%3ERY%3C/text%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+
+  <script>
+    document.documentElement.classList.add('js');
+    // Safety net: never leave the visitor stuck behind the loader if a CDN fails.
+    setTimeout(function () { document.documentElement.classList.add('loader-timeout'); }, 7000);
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
+  <script type="importmap">
+    { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js" } }
+  </script>
+  <script type="module" src="js/main.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <!-- ============ LOADER ============ -->
+  <div class="loader" aria-hidden="true">
+    <div class="loader__inner">
+      <div class="loader__log">
+        <p><span class="k">$</span> resolve rushabh.yeole <span class="dim">…</span> <span class="ok">1.2 ms</span></p>
+        <p><span class="k">→</span> SYN <span class="dim">seq=0</span></p>
+        <p><span class="k">←</span> SYN-ACK <span class="dim">seq=0 ack=1</span></p>
+        <p><span class="k">→</span> ACK <span class="dim">·</span> <span class="ok">connection established</span></p>
+      </div>
+      <div class="loader__foot">
+        <span class="loader__label">Negotiating a fast path</span>
+        <span class="loader__num" id="loaderNum">000</span>
+      </div>
+      <div class="loader__bar"><i></i></div>
+    </div>
+  </div>
+
+  <!-- ============ AMBIENT LAYERS ============ -->
+  <canvas class="webgl" aria-hidden="true"></canvas>
+  <div class="vignette" aria-hidden="true"></div>
+  <div class="guides" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <div class="cursor" aria-hidden="true">
+    <div class="cursor__dot"></div>
+    <div class="cursor__ring"></div>
+    <div class="cursor__label"></div>
+  </div>
+
+  <!-- ============ NAV + HUD ============ -->
+  <header class="nav">
+    <a class="nav__logo" href="#top" aria-label="Back to top" data-magnetic>
+      <span class="nav__mark">RY</span><span class="nav__name">rushabh.yeole</span>
+    </a>
+    <nav class="nav__links" aria-label="Sections">
+      <a href="#work" data-roll>Work</a>
+      <a href="#lab" data-roll>Lab</a>
+      <a href="#impact" data-roll>Day job</a>
+      <a href="#experience" data-roll>Experience</a>
+    </nav>
+    <a class="nav__cta" href="#contact" data-magnetic><span class="pulse"></span><span data-roll>Let's talk</span></a>
+  </header>
+
+  <aside class="hud" aria-hidden="true">
+    <div class="hud__col">
+      <span>19.07°N · 72.87°E</span>
+      <span id="hudSection">00 — Handshake</span>
+    </div>
+    <div class="hud__col hud__col--r">
+      <span id="hudFps">60 fps</span>
+      <span class="hud__tx">TX <span class="hud__meter"><i id="hudBar"></i></span> <b id="hudTx">00%</b></span>
+    </div>
+  </aside>
+
+  <main id="main">
+
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="top" data-section="00 — Handshake">
+      <div class="hero__top">
+        <p class="hero__eyebrow" data-hero-fade><span class="live-dot"></span> Backend &amp; systems engineer</p>
+        <p class="hero__eyebrow hero__eyebrow--r" data-hero-fade>Mumbai, IN · <span id="heroClock">--:--</span> IST</p>
+      </div>
+
+      <div class="hero__main">
+        <p class="hero__kicker" data-hero-fade>Servers · Protocols · Data · Tools</p>
+        <h1 class="hero__name" aria-label="Rushabh Yeole">
+          <span class="hero__line" data-fluid>Rushabh</span>
+          <span class="hero__line hero__line--r" data-fluid>Yeole</span>
+        </h1>
+      </div>
+
+      <div class="hero__bottom">
+        <p class="hero__tag" data-hero-fade>
+          I build <em class="swap" id="heroSwap">fast</em> things,<br>
+          from wire protocols to <span class="u">dashboards.</span>
+        </p>
+        <ul class="hero__stats" data-hero-fade>
+          <li><b>9</b><span>projects shipped</span></li>
+          <li><b>4</b><span>platforms</span></li>
+          <li><b>0</b><span>deps, flagship server</span></li>
+        </ul>
+        <a class="hero__scroll" href="#about" data-hero-fade>
+          <span class="hero__scroll-line"></span>
+          <span>Scroll to trace the route</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============ PROFILE ============ -->
+    <section class="about" id="about" data-section="01 — Profile">
+      <div class="label"><span>01</span> Profile</div>
+      <p class="manifesto" data-words>
+        I'm Rushabh, an engineer who likes <em>the layer underneath.</em>
+        I write servers without frameworks, hand-roll <b>WebSocket frames,</b> and read RFCs for fun.
+        I've shipped a macOS disk cleaner, an AI trading desk whose risk engine can overrule the model, and an anomaly detector that <em>refuses to lie</em> about its numbers.
+        Next stop is further down the stack: <b>packets, kernels and cache lines.</b>
+      </p>
+      <dl class="about__meta">
+        <div data-reveal><dt>Building</dt><dd>Maglev, an XDP load balancer<br><span>in development · see the lab ↓</span></dd></div>
+        <div data-reveal><dt>Shipped</dt><dd>9 projects, 4 platforms<br><span>web · macOS · Android · desktop</span></dd></div>
+        <div data-reveal><dt>Reading</dt><dd>Systems Performance<br><span>Brendan Gregg, second pass</span></dd></div>
+        <div data-reveal><dt>Off-screen</dt><dd>Benchmarking things<br><span>that don't need it. And chai.</span></dd></div>
+      </dl>
+    </section>
+
+    <!-- ============ SELECTED WORK (horizontal) ============ -->
+    <section class="work" id="work" data-section="02 — Work">
+      <div class="work__pin">
+        <div class="work__track">
+
+          <div class="panel panel--intro">
+            <div class="label"><span>02</span> Selected work</div>
+            <h2 class="work__big">Built<br>after<br><em>hours</em></h2>
+            <p class="work__hint">Five projects I designed, built and shipped myself: streaming, ML, AI agents, systems and networks. <span class="mono">keep scrolling ⟶</span></p>
+          </div>
+
+          <!-- 01 FinOps -->
+          <article class="panel" data-cursor="Open repo">
+            <div class="panel__info">
+              <div class="panel__meta panel__reveal"><span class="panel__idx">01</span><span>Flagship · 2026</span></div>
+              <h3 class="panel__title panel__reveal">FinOps<br>Dashboard</h3>
+              <p class="panel__pitch panel__reveal">Where every dollar of LLM and infra spend goes, per tenant, endpoint and call, streamed live.</p>
+              <div class="panel__stat panel__reveal"><span class="odo" data-value="227"></span><em>tests, mutation-checked 42 ways</em></div>
+              <ul class="panel__specs panel__reveal">
+                <li><b>0</b><span>npm dependencies. Hand-written WebSocket framing and SSE with real backpressure</span></li>
+                <li><b>1.43M</b><span>real requests imported from the BurstGPT trace</span></li>
+              </ul>
+              <div class="panel__tags panel__reveal"><span>Node.js</span><span>WebSocket</span><span>SSE</span><span>SQLite WAL</span></div>
+              <a class="panel__link panel__reveal" href="https://github.com/rushabh05/finops-dashboard" target="_blank" rel="noopener">github.com/rushabh05/finops-dashboard <span>↗</span></a>
+            </div>
+            <div class="panel__viz">
+              <div class="panel__media" data-parallax><img src="assets/img/finops.jpg" alt="FinOps dashboard in dark mode on 1.43 million real BurstGPT requests: spend per tenant and anomaly alerts" loading="lazy" decoding="async"></div>
+              <div class="finops-live" data-viz="finops">
+                <div class="finops-live__head"><span class="live-dot"></span> live · /api/stream <span class="finops-live__val">$0.0057/req</span></div>
+                <canvas></canvas>
+                <div class="finops-live__alert"><b>▲ Retry storm</b> tenant-03 · /api · robust z 6.2</div>
+              </div>
+            </div>
+          </article>
+
+          <!-- 02 TESSERA -->
+          <article class="panel" data-cursor="Open repo">
+            <div class="panel__info">
+              <div class="panel__meta panel__reveal"><span class="panel__idx">02</span><span>Final-year major project</span></div>
+              <h3 class="panel__title panel__reveal">TESSERA</h3>
+              <p class="panel__pitch panel__reveal">Multimodal cloud anomaly detection that refuses to lie about its own accuracy.</p>
+              <div class="panel__stat panel__reveal"><span class="odo" data-value="28"></span><span class="panel__unit">%</span><em>duplicate rows caught inflating accuracy</em></div>
+              <ul class="panel__specs panel__reveal">
+                <li><b>4</b><span>telemetry modalities (logs, Suricata netflow, destination graph, host) fused by a masked gate</span></li>
+                <li><b>Merkle</b><span>every verdict committed to a tamper-evident log with inclusion proofs</span></li>
+              </ul>
+              <div class="panel__tags panel__reveal"><span>Python</span><span>LightGBM</span><span>Suricata</span><span>Transparency log</span></div>
+              <a class="panel__link panel__reveal" href="https://github.com/rushabh05/tessera" target="_blank" rel="noopener">github.com/rushabh05/tessera <span>↗</span></a>
+            </div>
+            <div class="panel__viz"><canvas class="viz-canvas" data-viz="tessera" aria-label="Animated diagram: four telemetry streams fuse through a gate into a tamper-evident verdict log"></canvas></div>
+          </article>
+
+          <!-- 03 AI Trading Desk -->
+          <article class="panel">
+            <div class="panel__info">
+              <div class="panel__meta panel__reveal"><span class="panel__idx">03</span><span>AI agents · Quant · Paper trading</span></div>
+              <h3 class="panel__title panel__reveal">AI Trading Desk</h3>
+              <p class="panel__pitch panel__reveal">LLM agents scout NSE stocks and write a typed trade thesis. A deterministic risk engine decides whether it trades, and how big.</p>
+              <div class="panel__stat panel__reveal"><span class="odo" data-value="547"></span><em>NSE stocks backtested over 12 years, test window locked</em></div>
+              <ul class="panel__specs panel__reveal">
+                <li><b>3 desks</b><span>swing, options and intraday, each with its own simulated paper account and journal</span></li>
+                <li><b>686</b><span>tests; 24 indicators verified numerically; 17 baseline signals scored against matched random entries</span></li>
+              </ul>
+              <div class="panel__tags panel__reveal"><span>Python</span><span>LLM agents</span><span>Pydantic</span><span>pandas</span><span>Backtesting</span></div>
+            </div>
+            <div class="panel__viz"><canvas class="viz-canvas" data-viz="trading" aria-label="Animated diagram: a candlestick chart while scout, analyst, risk engine and paper broker stages approve or refuse each trade idea"></canvas></div>
+          </article>
+
+          <!-- 04 SpaceSaver -->
+          <article class="panel" data-cursor="Download">
+            <div class="panel__info">
+              <div class="panel__meta panel__reveal"><span class="panel__idx">04</span><span>Shipped · macOS</span></div>
+              <h3 class="panel__title panel__reveal">SpaceSaver</h3>
+              <p class="panel__pitch panel__reveal">A native macOS cleaner that finds the gigabytes hiding in "System Data" and gives them back, with undo.</p>
+              <div class="panel__stat panel__reveal"><span class="panel__sign">~</span><span class="odo" data-value="3"></span><span class="panel__unit">MB</span><em>native app. No Electron, no telemetry</em></div>
+              <ul class="panel__specs panel__reveal">
+                <li><b>‖ scan</b><span>parallel <code>getattrlistbulk</code> walker; allocated sizes that match <code>du</code></span></li>
+                <li><b>45</b><span>artifact rules, a built-in MCP server, CLI and LaunchAgent scheduling</span></li>
+              </ul>
+              <div class="panel__tags panel__reveal"><span>Swift</span><span>SwiftUI</span><span>Darwin syscalls</span><span>MCP</span></div>
+              <a class="panel__link panel__reveal" href="https://rushabh05.github.io/SpaceSaver/" target="_blank" rel="noopener">rushabh05.github.io/SpaceSaver <span>↗</span></a>
+            </div>
+            <div class="panel__viz panel__viz--light">
+              <div class="panel__media panel__media--contain" data-parallax data-viz="spacesaver">
+                <img src="assets/img/spacesaver-app.jpg" alt="SpaceSaver's Project Artifacts screen listing 8.38 GB of stale build outputs" loading="lazy" decoding="async">
+                <div class="scanline"></div>
+              </div>
+              <div class="scan-readout"><span class="mono">scanned</span> <b data-scan-files>0</b> <span class="mono">files</span> · <b data-scan-gb>0.00</b> <span class="mono">GB safe to clean</span></div>
+            </div>
+          </article>
+
+          <!-- 05 Flare -->
+          <article class="panel" data-cursor="Open repo">
+            <div class="panel__info">
+              <div class="panel__meta panel__reveal"><span class="panel__idx">05</span><span>Desktop app</span></div>
+              <h3 class="panel__title panel__reveal">Flare Browser</h3>
+              <p class="panel__pitch panel__reveal">A fast desktop browser that kills ads at the request layer, before they cost a byte of render time.</p>
+              <div class="panel__stat panel__reveal"><span class="panel__sign">L</span><span class="odo" data-value="7"></span><em>ad networks blocked per request, before render</em></div>
+              <ul class="panel__specs panel__reveal">
+                <li><b>skip</b><span>YouTube ads auto-skipped and hidden</span></li>
+                <li><b>arm64</b><span>+ x64 macOS builds; Windows and Linux targets</span></li>
+              </ul>
+              <div class="panel__tags panel__reveal"><span>Electron</span><span>React</span><span>TypeScript</span><span>webRequest</span></div>
+              <a class="panel__link panel__reveal" href="https://github.com/rushabh05/web-browser" target="_blank" rel="noopener">github.com/rushabh05/web-browser <span>↗</span></a>
+            </div>
+            <div class="panel__viz"><canvas class="viz-canvas" data-viz="flare" aria-label="Animated diagram: network requests stream into a filter; ad requests are blocked, the rest pass through"></canvas></div>
+          </article>
+
+          <div class="panel panel--outro">
+            <p class="mono">EOF · 5 of 5</p>
+            <h3>Next: what I'm<br><em>building</em> ↓</h3>
+          </div>
+        </div>
+
+        <div class="work__progress" aria-hidden="true">
+          <span id="workIdx">00</span>
+          <div class="work__bar"><i></i></div>
+          <span>05</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ LAB: FEATURED BUILD ============ -->
+    <section class="feature" id="lab" data-section="03 — Lab">
+      <div class="feature__head">
+        <div class="label"><span>03</span> In development · LAB-01</div>
+        <h2 class="sh" data-split>Maglev</h2>
+        <p class="feature__sub">an XDP load balancer</p>
+      </div>
+      <div class="feature__grid">
+        <div class="feature__copy">
+          <p class="feature__lede" data-reveal>An L4 load balancer that runs inside the NIC driver with eBPF/XDP. It picks a backend with Maglev consistent hashing and forwards the packet before the kernel allocates a single <code>sk_buff</code>.</p>
+          <ul class="feature__specs" data-reveal>
+            <li><b>10M+</b><span>packets per second per core (target)</span></li>
+            <li><b>~1/N</b><span>flows remapped when a backend dies, not all of them</span></li>
+            <li><b>0</b><span>dropped connections on a backend hot-reload (target)</span></li>
+          </ul>
+          <ol class="feature__road" data-reveal>
+            <li class="is-done"><span></span>Maglev table + simulator <em>done</em></li>
+            <li class="is-doing"><span></span>XDP data plane in C / eBPF <em>in progress</em></li>
+            <li><span></span>Go control plane, hot backend reload</li>
+            <li><span></span>Benchmarks vs IPVS and HAProxy</li>
+          </ol>
+          <p class="feature__stack mono" data-reveal>C · eBPF · XDP · Go · pktgen</p>
+        </div>
+        <div class="mg" data-viz="maglev" data-reveal>
+          <div class="mg__canvas"><canvas class="viz-canvas" aria-label="Interactive Maglev load-balancer simulation: packets are hashed into a 53-slot table and forwarded to five backends"></canvas></div>
+          <div class="mg__bar">
+            <span class="mono">Fail a backend →</span>
+            <button type="button" data-be="0" aria-pressed="false" style="--c:#c6ff3d">be-1</button>
+            <button type="button" data-be="1" aria-pressed="false" style="--c:#8fb8ff">be-2</button>
+            <button type="button" data-be="2" aria-pressed="false" style="--c:#ffb86b">be-3</button>
+            <button type="button" data-be="3" aria-pressed="false" style="--c:#ff7ac6">be-4</button>
+            <button type="button" data-be="4" aria-pressed="false" style="--c:#7af0d1">be-5</button>
+            <span class="mg__stat mono" data-mg-stat aria-live="polite">53 slots · 5 backends up</span>
+          </div>
+          <p class="mg__note mono">This runs the real Maglev table-population algorithm in your browser. The eBPF data plane is what's in progress.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ LAB: BENCH ============ -->
+    <section class="lab" data-section="03 — Lab">
+      <div class="lab__head">
+        <div class="label"><span>03.b</span> Also on the bench</div>
+        <h2 class="sh" data-split>The deep end</h2>
+        <div class="term" data-term>
+          <div class="term__bar"><i></i><i></i><i></i><span>~/lab — zsh</span></div>
+          <pre class="term__body"><code></code></pre>
+        </div>
+      </div>
+      <p class="lab__intro" data-reveal>Projects that go all the way down the stack, from packets to kernels to cache lines. Each has a hard number it has to hit.</p>
+
+      <div class="lab__grid">
+        <article class="lab__card">
+          <header><span class="mono">LAB-02</span><span class="status">designing</span></header>
+          <h3>TCP/IP, from scratch</h3>
+          <p>A userspace stack on a TUN device: ARP, IPv4, the full TCP state machine, retransmits, then CUBIC and BBR.</p>
+          <ul><li><span>spec</span>RFC 9293 state machine</li><li><span>bench</span>head-to-head vs the kernel</li><li><span>proof</span>Wireshark-verified traces</li></ul>
+          <footer>Rust · TUN/TAP · pcap</footer>
+        </article>
+        <article class="lab__card">
+          <header><span class="mono">LAB-03</span><span class="status">designing</span></header>
+          <h3>Raft KV Store</h3>
+          <p>A linearizable, replicated key-value store, tortured with partitions, clock skew and killed leaders.</p>
+          <ul><li><span>target</span>p99 &lt; 5 ms writes, 3 nodes</li><li><span>chaos</span>Jepsen-style partition tests</li><li><span>perf</span>batching + pipelining</li></ul>
+          <footer>Go · gRPC · Raft</footer>
+        </article>
+        <article class="lab__card">
+          <header><span class="mono">LAB-04</span><span class="status">designing</span></header>
+          <h3>Lock-free Matching Engine</h3>
+          <p>A limit order book where the hot path never takes a lock and never allocates.</p>
+          <ul><li><span>target</span>p99 &lt; 1 µs per match</li><li><span>queues</span>SPSC ring buffers</li><li><span>layout</span>cache-line aligned, core-pinned</li></ul>
+          <footer>C++20 · perf · flamegraphs</footer>
+        </article>
+        <article class="lab__card">
+          <header><span class="mono">LAB-05</span><span class="status">designing</span></header>
+          <h3>QUIC over raw UDP</h3>
+          <p>Loss recovery, 0-RTT resumption and connection migration that survives a Wi-Fi to 5G handoff.</p>
+          <ul><li><span>spec</span>RFC 9000 / 9002</li><li><span>target</span>0-RTT resume, no stalls on migration</li><li><span>crypto</span>TLS 1.3 handshake</li></ul>
+          <footer>Rust · UDP · TLS 1.3</footer>
+        </article>
+        <article class="lab__card">
+          <header><span class="mono">LAB-06</span><span class="status">designing</span></header>
+          <h3>Vectorized Query Engine</h3>
+          <p>Columnar execution with SIMD kernels tuned for Graviton's NEON, benchmarked on TPC-H.</p>
+          <ul><li><span>format</span>Arrow-native batches</li><li><span>kernels</span>NEON + AVX2</li><li><span>bench</span>TPC-H SF10 vs DuckDB</li></ul>
+          <footer>C++ · Arrow · SIMD</footer>
+        </article>
+        <a class="lab__card lab__card--open" href="#contact">
+          <header><span class="mono">LAB-07</span><span class="status">open slot</span></header>
+          <h3>Got a hard problem?</h3>
+          <p>If it involves latency, throughput or a bill that's too big, I'd like to hear about it.</p>
+          <footer>Open a connection ↓</footer>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============ DAY JOB: 100 → 8 ============ -->
+    <section class="pods" id="impact" data-section="04 — Day job">
+      <div class="pods__pin">
+        <div class="pods__copy">
+          <div class="label"><span>04</span> Day job · Media.net</div>
+          <h2 class="pods__title">PHP <span class="arrow">→</span> Node.js</h2>
+          <div class="pods__steps">
+            <p class="pods__step is-first">At work, PHP served the pre-ping service <b>one job per process.</b> To survive peak traffic it kept a floor of <b>100 pods</b> running all day.</p>
+            <p class="pods__step">I led the move to Node.js. One event loop now juggles <b>thousands of concurrent requests</b> per process instead of one.</p>
+            <p class="pods__step">The always-on floor fell from 100 pods to <b>8–10.</b> The infra bill fell <b class="hl">90%.</b></p>
+          </div>
+        </div>
+        <div class="pods__viz">
+          <div class="pods__readout">
+            <div><span class="mono-label">Always-on pods</span><b id="podCount">100</b></div>
+            <div><span class="mono-label">Infra cost</span><b><span id="podCost">100</span>%</b></div>
+          </div>
+          <div class="pods__grid" aria-label="Grid of pods shrinking from 100 to 8"></div>
+          <div class="pods__bar"><i></i></div>
+          <div class="pods__runtime"><span id="podRuntime">php-fpm · 1 job / process</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="dayjob" data-section="04 — Day job">
+      <p class="dayjob__head mono">Also shipped at Media.net</p>
+      <div class="dayjob__grid">
+        <article class="dj" data-reveal>
+          <div class="dj__viz"><canvas class="viz-canvas" data-viz="graviton" aria-label="An x86 chip and a Graviton chip process the same jobs while the Graviton cost counter grows 24% slower"></canvas></div>
+          <div class="dj__body"><b class="dj__stat">−24%</b><h3>Reporting, moved to ARM</h3><p>Reporting workloads moved from x86 to AWS Graviton with no performance lost.</p></div>
+        </article>
+        <article class="dj" data-reveal>
+          <div class="dj__viz"><canvas class="viz-canvas" data-viz="spark" aria-label="Spark executors rise and fall with the workload instead of staying at the static maximum"></canvas></div>
+          <div class="dj__body"><b class="dj__stat">−28%</b><h3>Spark that sizes itself</h3><p>Dynamic Executor Allocation, plus Scala ETL that took the heaviest work off Redshift.</p></div>
+        </article>
+        <article class="dj" data-reveal>
+          <div class="dj__viz">
+            <div class="bot" data-viz="slackbot">
+              <div class="bot__win">
+                <div class="bot__bar"><span># prod-ops</span><span class="mono">slack</span></div>
+                <div class="bot__feed">
+                  <div class="msg"><span class="av">PO</span><div><b>prod-ops</b><p>The <code>daily_revenue</code> dashboard is slow to refresh.</p></div></div>
+                  <div class="msg"><span class="av av--bot">AI</span><div><b>report-bot</b><p>On it. Writing the Spark job<span class="dots"><i></i><i></i><i></i></span></p></div></div>
+                  <div class="msg"><span class="av av--bot">AI</span><div><b>report-bot</b><pre class="bot__code"><code></code></pre></div></div>
+                  <div class="msg"><span class="av av--bot">AI</span><div><b>report-bot</b><p class="bot__mr">✓ Merge request opened. Ready for review.</p></div></div>
+                </div>
+              </div>
+              <p class="bot__note mono">illustration</p>
+            </div>
+          </div>
+          <div class="dj__body"><b class="dj__stat">−95%</b><h3>The bot that writes the ETL</h3><p>Flag a slow dashboard in Slack; the bot writes the Scala ETL and ClickHouse schema and opens the MR.</p></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ EXPERIENCE ============ -->
+    <section class="xp" id="experience" data-section="05 — Experience">
+      <div class="xp__side">
+        <div class="label"><span>05</span> Experience</div>
+        <h2 class="sh" data-split>The résumé bit</h2>
+        <p class="xp__note">Two companies, one habit: find the expensive thing, measure it, make it small.</p>
+      </div>
+      <div class="xp__list">
+        <div class="xp__rail"><i></i></div>
+
+        <article class="job">
+          <header class="job__head" data-reveal>
+            <div>
+              <h3 class="job__co">Media.net</h3>
+              <p class="job__role">Web Application Developer · Mumbai</p>
+            </div>
+            <span class="job__date">Jan 2025 — Present</span>
+          </header>
+          <p class="job__sum" data-reveal>Backend and data-infrastructure work across the pre-ping service and the reporting pipelines.</p>
+          <div class="job__pills" data-reveal>
+            <span class="pill pill--hot">−90% infra</span><span class="pill">−33% network calls</span><span class="pill">−24% compute</span><span class="pill">−28% Spark</span><span class="pill">−95% manual</span>
+          </div>
+        </article>
+
+        <article class="job">
+          <header class="job__head" data-reveal>
+            <div>
+              <h3 class="job__co">Hyperboost AI</h3>
+              <p class="job__role">Software Developer · Mumbai</p>
+            </div>
+            <span class="job__date">Jun — Dec 2024</span>
+          </header>
+          <ul class="job__items">
+            <li data-reveal><div><b>Storage on DynamoDB + S3</b><p>Re-modelled chat and document storage: 30% more storage-efficient and faster to read.</p></div><span class="pill">+20% faster reads</span></li>
+            <li data-reveal><div><b>RAG, redesigned</b><p>Rebuilt retrieval-augmented generation end to end for better answers.</p></div><span class="pill">+40% quality</span></li>
+            <li data-reveal><div><b>APIs under load</b><p>Validation, pagination and caching for chat and document pipelines under concurrent traffic.</p></div><span class="pill">cache · paginate</span></li>
+          </ul>
+        </article>
+
+        <article class="job job--edu">
+          <header class="job__head" data-reveal>
+            <div>
+              <h3 class="job__co">Shah &amp; Anchor</h3>
+              <p class="job__role">B.E. Computer Engineering · CGPA 8.93</p>
+            </div>
+            <span class="job__date">2020 — 2024</span>
+          </header>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ MORE PROJECTS ============ -->
+    <section class="archive" data-section="06 — More projects">
+      <div class="archive__head">
+        <div class="label"><span>06</span> More projects</div>
+        <p class="archive__note">Smaller builds, same habits.</p>
+      </div>
+      <ul class="archive__list">
+        <li class="archive__row" data-reveal>
+          <span class="archive__n">06</span><b>PharmaBook</b><span>Offline-first billing, stock and credit for Indian pharmacies, with GSTR-1 export and multi-phone sync.</span><em>Flutter · Drift · Firebase</em>
+        </li>
+        <li class="archive__row" data-reveal>
+          <a class="archive__a" href="https://github.com/rushabh05/SQL_online_ide" target="_blank" rel="noopener" aria-label="SQL Workspace on GitHub"></a>
+          <span class="archive__n">07</span><b>SQL Workspace <i>↗</i></b><span>A DBeaver-style SQL IDE in the browser: CSV to tables, Monaco editor, DuckDB execution.</span><em>FastAPI · DuckDB · Next.js</em>
+        </li>
+        <li class="archive__row" data-reveal>
+          <span class="archive__n">08</span><b>Bullet Storm</b><span>Auto-shooter roguelike for Android. Every sprite and sound is generated at runtime. No physics engine.</span><em>Unity 6 · C#</em>
+        </li>
+        <li class="archive__row" data-reveal>
+          <span class="archive__n">09</span><b>Tile Match</b><span>Mahjong-solitaire tile matcher whose board builds itself from code.</span><em>Unity 6 · C#</em>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ============ STACK ============ -->
+    <section class="stack" aria-label="Technologies" data-section="06 — More projects">
+      <div class="marquee"><div class="marquee__track">
+        <span>C++</span><i>✳</i><span>Python</span><i>✳</i><span>Scala</span><i>✳</i><span>Java</span><i>✳</i><span>TypeScript</span><i>✳</i><span>Node.js</span><i>✳</i><span>Swift</span><i>✳</i><span>Spark</span><i>✳</i><span>Kafka</span><i>✳</i><span>Airflow</span><i>✳</i><span>Redis</span><i>✳</i>
+      </div></div>
+      <div class="marquee marquee--alt"><div class="marquee__track">
+        <span>AWS Graviton</span><i>/</i><span>EC2 · S3</span><i>/</i><span>DynamoDB</span><i>/</i><span>Redshift</span><i>/</i><span>ClickHouse</span><i>/</i><span>DuckDB</span><i>/</i><span>PostgreSQL</span><i>/</i><span>SQLite</span><i>/</i><span>Docker</span><i>/</i><span>WebSockets</span><i>/</i><span>FastAPI</span><i>/</i><span>NestJS</span><i>/</i>
+      </div></div>
+    </section>
+
+    <!-- ============ CONTACT ============ -->
+    <section class="contact" id="contact" data-section="07 — Connect">
+      <div class="label"><span>07</span> Open a connection</div>
+      <h2 class="contact__title">
+        <span class="contact__line" data-fluid>Let's build</span>
+        <span class="contact__line">something <em>fast.</em></span>
+      </h2>
+
+      <div class="contact__grid">
+        <div class="contact__actions">
+          <button class="mail" type="button" data-copy="rushabhyeole03@gmail.com" data-magnetic data-cursor="Copy">
+            <span class="mail__text">rushabhyeole03@gmail.com</span>
+            <span class="mail__hint" aria-live="polite">copy</span>
+          </button>
+          <div class="contact__btns">
+            <a class="btn" href="mailto:rushabhyeole03@gmail.com" data-magnetic><span data-roll>Email me</span> <span>↗</span></a>
+            <a class="btn btn--ghost" href="assets/Rushabh_Yeole_Resume.pdf" target="_blank" rel="noopener" data-magnetic><span data-roll>Résumé</span> <span>↓</span></a>
+          </div>
+        </div>
+
+        <div class="ping">
+          <div class="term__bar"><i></i><i></i><i></i><span>measure the path to me</span></div>
+          <pre class="ping__out" aria-live="polite">$ ping rushabh.yeole</pre>
+          <button class="ping__btn" type="button" data-magnetic>Run ping <span>↵</span></button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="foot__links">
+      <!-- TODO: add LeetCode / GeeksforGeeks / LinkedIn profile URLs, then remove data-todo -->
+      <a href="https://github.com/rushabh05" target="_blank" rel="noopener" data-roll>GitHub</a>
+      <a href="#" data-todo="leetcode" data-roll>LeetCode</a>
+      <a href="#" data-todo="gfg" data-roll>GeeksforGeeks</a>
+      <a href="mailto:rushabhyeole03@gmail.com" data-roll>Email</a>
+    </div>
+    <div class="foot__meta">
+      <span>© <span id="year">2026</span> Rushabh Yeole</span>
+      <span>Built with Three.js, GSAP &amp; an unhealthy interest in latency</span>
+      <a href="#top" class="foot__top" data-roll>Back to top ↑</a>
+    </div>
+  </footer>
+</body>
+</html>
