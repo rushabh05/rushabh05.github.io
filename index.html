@@ -501,21 +501,38 @@
       </h2>
 
       <div class="contact__grid">
-        <div class="contact__actions">
-          <button class="mail" type="button" data-copy="rushabhyeole03@gmail.com" data-magnetic data-cursor="Copy">
-            <span class="mail__text">rushabhyeole03@gmail.com</span>
-            <span class="mail__hint" aria-live="polite">copy</span>
-          </button>
-          <div class="contact__btns">
-            <a class="btn" href="mailto:rushabhyeole03@gmail.com" data-magnetic><span data-roll>Email me</span> <span>↗</span></a>
-            <a class="btn btn--ghost" href="assets/Rushabh_Yeole_Resume.pdf" target="_blank" rel="noopener" data-magnetic><span data-roll>Résumé</span> <span>↓</span></a>
+        <!-- Messages are relayed by FormSubmit (formsubmit.co) to the inbox below. -->
+        <form class="cform" data-endpoint="https://formsubmit.co/ajax/rushabhyeole03@gmail.com" novalidate>
+          <div class="term__bar"><i></i><i></i><i></i><span>send a packet · lands straight in my inbox</span></div>
+          <div class="cform__body">
+            <label class="cform__field"><span>Name</span><input name="name" autocomplete="name" required maxlength="80"></label>
+            <label class="cform__field"><span>Email</span><input name="email" type="email" autocomplete="email" required maxlength="120"></label>
+            <label class="cform__field cform__field--full"><span>Message</span><textarea name="message" rows="5" required maxlength="4000" data-lenis-prevent placeholder="A role, a project, a hard problem…"></textarea></label>
+            <input class="cform__hp" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <div class="cform__foot">
+              <button class="btn cform__send" type="submit"><span data-roll>Send packet</span> <span>→</span></button>
+              <p class="cform__status mono" role="status" aria-live="polite"></p>
+            </div>
           </div>
-        </div>
+        </form>
 
-        <div class="ping">
-          <div class="term__bar"><i></i><i></i><i></i><span>measure the path to me</span></div>
-          <pre class="ping__out" aria-live="polite">$ ping rushabh.yeole</pre>
-          <button class="ping__btn" type="button" data-magnetic>Run ping <span>↵</span></button>
+        <div class="contact__side">
+          <div class="contact__actions">
+            <button class="mail" type="button" data-copy="rushabhyeole03@gmail.com" data-magnetic data-cursor="Copy">
+              <span class="mail__text">rushabhyeole03@gmail.com</span>
+              <span class="mail__hint" aria-live="polite">copy</span>
+            </button>
+            <div class="contact__btns">
+              <a class="btn btn--ghost" href="mailto:rushabhyeole03@gmail.com" data-magnetic><span data-roll>Email me</span> <span>↗</span></a>
+              <a class="btn btn--ghost" href="assets/Rushabh_Yeole_Resume.pdf" target="_blank" rel="noopener" data-magnetic><span data-roll>Résumé</span> <span>↓</span></a>
+            </div>
+          </div>
+
+          <div class="ping">
+            <div class="term__bar"><i></i><i></i><i></i><span>measure the path to me</span></div>
+            <pre class="ping__out" aria-live="polite">$ ping rushabh.yeole</pre>
+            <button class="ping__btn" type="button" data-magnetic>Run ping <span>↵</span></button>
+          </div>
         </div>
       </div>
     </section>
@@ -523,10 +540,9 @@
 
   <footer class="foot">
     <div class="foot__links">
-      <!-- TODO: add LeetCode / GeeksforGeeks / LinkedIn profile URLs, then remove data-todo -->
       <a href="https://github.com/rushabh05" target="_blank" rel="noopener" data-roll>GitHub</a>
-      <a href="#" data-todo="leetcode" data-roll>LeetCode</a>
-      <a href="#" data-todo="gfg" data-roll>GeeksforGeeks</a>
+      <a href="https://leetcode.com/rushabh05/" target="_blank" rel="noopener" data-roll>LeetCode</a>
+      <a href="https://www.geeksforgeeks.org/profile/rushabhyeole15749" target="_blank" rel="noopener" data-roll>GeeksforGeeks</a>
       <a href="mailto:rushabhyeole03@gmail.com" data-roll>Email</a>
     </div>
     <div class="foot__meta">

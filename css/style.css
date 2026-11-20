@@ -480,12 +480,35 @@ section { position: relative; }
 .contact__title { margin: 4vh 0 7vh; font-weight: 900; font-stretch: var(--stretch); text-transform: uppercase; font-size: clamp(38px, 6vw, 112px); line-height: 0.88; letter-spacing: -0.04em; }
 .contact__line { display: block; white-space: nowrap; }
 .contact__title em { text-transform: none; color: var(--accent); font-size: 1.08em; letter-spacing: -0.02em; }
-.contact__grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 4vw; align-items: end; margin-top: auto; }
+.contact__grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 3vw; align-items: start; margin-top: auto; }
+.contact__side { display: grid; gap: 28px; }
 .mail { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; text-align: left; }
-.mail__text { font-weight: 700; font-stretch: 102%; font-size: clamp(19px, 2.3vw, 36px); letter-spacing: -0.02em; border-bottom: 2px solid var(--accent); line-height: 1.15; padding-bottom: 4px; }
+.mail__text { font-weight: 700; font-stretch: 102%; font-size: clamp(18px, 1.9vw, 30px); letter-spacing: -0.02em; border-bottom: 2px solid var(--accent); line-height: 1.15; padding-bottom: 4px; }
+
+/* contact form → FormSubmit → inbox */
+.cform { border: 1px solid var(--line-2); border-radius: 12px; background: rgba(8, 9, 11, 0.92); overflow: hidden; }
+.cform__body { padding: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; position: relative; }
+.cform__field { display: grid; gap: 6px; }
+.cform__field--full { grid-column: 1 / -1; }
+.cform__field > span { font-family: var(--f-mono); font-size: 10.5px; text-transform: uppercase; color: var(--ink-3); }
+.cform input, .cform textarea {
+  font: inherit; font-size: 15px; color: var(--ink); background: rgba(236, 234, 228, 0.03); border: 1px solid var(--line-2);
+  border-radius: 8px; padding: 11px 12px; outline: none; resize: vertical; transition: border-color 0.3s, background 0.3s;
+}
+.cform textarea { min-height: 120px; }
+.cform input:focus, .cform textarea:focus { border-color: var(--accent); background: rgba(198, 255, 61, 0.04); }
+.cform input[aria-invalid="true"], .cform textarea[aria-invalid="true"] { border-color: var(--alert); }
+.cform ::placeholder { color: var(--ink-3); }
+.cform__hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.cform__foot { grid-column: 1 / -1; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 4px; }
+.cform__send[disabled] { opacity: 0.55; pointer-events: none; }
+.cform__status { font-size: 11px; text-transform: none; color: var(--ink-2); }
+.cform__status[data-state="ok"] { color: var(--accent); }
+.cform__status[data-state="err"] { color: var(--alert); }
+.has-cursor input, .has-cursor textarea { cursor: text; }
 .mail__hint { font-family: var(--f-mono); font-size: 11px; text-transform: uppercase; color: var(--ink-3); }
 .mail.is-copied .mail__hint { color: var(--accent); }
-.contact__btns { display: flex; gap: 12px; margin-top: 30px; flex-wrap: wrap; }
+.contact__btns { display: flex; gap: 12px; margin-top: 22px; flex-wrap: wrap; }
 .btn { display: inline-flex; align-items: center; gap: 10px; font-family: var(--f-mono); font-size: 12px; text-transform: uppercase; padding: 14px 22px; border-radius: 99px; background: var(--accent); color: var(--accent-ink); font-weight: 500; }
 .btn--ghost { background: transparent; color: var(--ink); border: 1px solid var(--line-2); }
 .ping { border: 1px solid var(--line-2); border-radius: 12px; background: rgba(8, 9, 11, 0.9); overflow: hidden; }
@@ -560,6 +583,7 @@ section { position: relative; }
   .lab__grid { grid-template-columns: 1fr; }
   .lab__card { min-height: 0; }
   .contact__grid { grid-template-columns: 1fr; gap: 44px; }
+  .cform__body { grid-template-columns: 1fr; }
   .contact__line { white-space: normal; }
   .finops-live { width: 78%; right: 4%; bottom: 4%; }
   .dayjob__grid { grid-template-columns: 1fr; }

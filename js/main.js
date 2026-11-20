@@ -600,6 +600,8 @@ function contact(chars) {
     });
   }
 
+  contactForm();
+
   // copy email
   const mail = $('.mail');
   const hint = $('.mail__hint', mail);
@@ -660,6 +662,65 @@ function contact(chars) {
     }
     line('→ lowest-latency route to me: rushabhyeole03@gmail.com', 'c-acc');
     btn.disabled = false;
+  });
+}
+
+/* =================================================================== contact form */
+// Posts to FormSubmit's AJAX endpoint, which emails the message to the address in
+// data-endpoint. The very first submission triggers a one-time "Activate form" email.
+function contactForm() {
+  const form = $('.cform');
+  if (!form) return;
+  const status = $('.cform__status', form);
+  const send = $('.cform__send', form);
+  const say = (text, state) => { status.textContent = text; status.dataset.state = state || ''; };
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(form));
+    if (data._honey) return; // a bot filled the hidden field
+    const fields = { name: data.name.trim(), email: data.email.trim(), message: data.message.trim() };
+    const bad = {
+      name: !fields.name,
+      email: !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(fields.email),
+      message: fields.message.length < 5,
+    };
+    Object.entries(bad).forEach(([k, v]) => form.elements[k].setAttribute('aria-invalid', String(v)));
+    if (Object.values(bad).some(Boolean)) {
+      say('✗ add your name, a valid email and a message', 'err');
+      form.querySelector('[aria-invalid="true"]').focus();
+      return;
+    }
+
+    send.disabled = true;
+    say('→ SYN · sending…');
+    try {
+      const res = await fetch(form.dataset.endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          ...fields,
+          _subject: `Portfolio: message from ${fields.name}`,
+          _replyto: fields.email,
+          _template: 'table',
+        }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (res.ok && String(json.success) === 'true') {
+        say('← ACK · delivered. I’ll get back to you soon.', 'ok');
+        form.reset();
+        Object.keys(bad).forEach((k) => form.elements[k].removeAttribute('aria-invalid'));
+      } else if (/activat/i.test(json.message || '')) {
+        say('Almost there: this form is waiting for activation. Please email me directly for now.', 'err');
+      } else {
+        throw new Error(json.message || `HTTP ${res.status}`);
+      }
+    } catch (err) {
+      console.warn('contact form', err);
+      say('✗ didn’t go through. Email me directly: rushabhyeole03@gmail.com', 'err');
+    } finally {
+      send.disabled = false;
+    }
   });
 }
 
