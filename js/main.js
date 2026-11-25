@@ -538,7 +538,7 @@ function lab() {
     ['$ ', 'c-acc'], ['cat ~/lab/RULES.md\n'],
     ['1. every project ships a benchmark\n2. every claim ships a flamegraph\n3. read the RFC before the blog post\n', 'c-dim'],
     ['$ ', 'c-acc'], ['./lab --status\n'],
-    ['6 projects · 1 in development · 5 designing', 'c-acc'],
+    ['6 projects · 1 shipped · 5 designing', 'c-acc'],
   ];
   const type = async () => {
     code.textContent = '';

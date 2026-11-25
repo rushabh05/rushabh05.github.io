@@ -110,7 +110,7 @@
           from wire protocols to <span class="u">dashboards.</span>
         </p>
         <ul class="hero__stats" data-hero-fade>
-          <li><b>8</b><span>projects shipped</span></li>
+          <li><b>9</b><span>projects shipped</span></li>
           <li><b>4</b><span>platforms</span></li>
           <li><b>0</b><span>deps, flagship server</span></li>
         </ul>
@@ -130,8 +130,8 @@
         Next stop: <b>packets, kernels and cache lines.</b>
       </p>
       <dl class="about__meta">
-        <div data-reveal><dt>Building</dt><dd>Maglev, an XDP load balancer<br><span>in development · see the lab ↓</span></dd></div>
-        <div data-reveal><dt>Shipped</dt><dd>8 projects, 4 platforms<br><span>web · macOS · Android · desktop</span></dd></div>
+        <div data-reveal><dt>Building</dt><dd>Maglev, an XDP load balancer<br><span>open source · phase 3: benchmarks ↓</span></dd></div>
+        <div data-reveal><dt>Shipped</dt><dd>9 projects, 4 platforms<br><span>web · macOS · Android · desktop</span></dd></div>
         <div data-reveal><dt>Reading</dt><dd>Systems Performance<br><span>Brendan Gregg, second pass</span></dd></div>
         <div data-reveal><dt>Off-screen</dt><dd>Benchmarking things<br><span>that don't need it. And chai.</span></dd></div>
       </dl>
@@ -247,7 +247,7 @@
 
           <div class="panel panel--outro">
             <p class="mono">EOF · 5 of 5</p>
-            <h3>Next: what I'm<br><em>building</em> ↓</h3>
+            <h3>Next: down in<br><em>the kernel</em> ↓</h3>
           </div>
         </div>
 
@@ -262,25 +262,26 @@
     <!-- ============ LAB: FEATURED BUILD ============ -->
     <section class="feature" id="lab" data-section="03 — Lab">
       <div class="feature__head">
-        <div class="label"><span>03</span> In development · LAB-01</div>
+        <div class="label"><span>03</span> Open source · LAB-01</div>
         <h2 class="sh" data-split>Maglev</h2>
         <p class="feature__sub">an XDP load balancer</p>
       </div>
       <div class="feature__grid">
         <div class="feature__copy">
-          <p class="feature__lede" data-reveal>An L4 load balancer that runs inside the NIC driver with eBPF/XDP. It picks a backend with Maglev consistent hashing and forwards the packet before the kernel allocates a single <code>sk_buff</code>.</p>
+          <p class="feature__lede" data-reveal>An L4 load balancer on eBPF/XDP. A Go control plane builds Maglev consistent-hashing tables; a C program at the XDP hook picks each packet's backend and forwards it before the network stack ever sees it.</p>
           <ul class="feature__specs" data-reveal>
-            <li><b>10M+</b><span>packets per second per core (target)</span></li>
-            <li><b>~1/N</b><span>flows remapped when a backend dies, not all of them</span></li>
-            <li><b>0</b><span>dropped connections on a backend hot-reload (target)</span></li>
+            <li><b>10.2%</b><span>of flows moved when 1 of 10 backends failed. <code>hash mod N</code> moved 90%</span></li>
+            <li><b>0</b><span>of 511 at-risk connections moved when a backend joined, thanks to connection tracking</span></li>
+            <li><b>~2 ms</b><span>to rebuild and hot-swap the table on <code>SIGHUP</code>, no restart</span></li>
           </ul>
           <ol class="feature__road" data-reveal>
-            <li class="is-done"><span></span>Maglev table + simulator <em>done</em></li>
-            <li class="is-doing"><span></span>XDP data plane in C / eBPF <em>in progress</em></li>
-            <li><span></span>Go control plane, hot backend reload</li>
-            <li><span></span>Benchmarks vs IPVS and HAProxy</li>
+            <li class="is-done"><span></span>Maglev table in Go, 65,537 slots <em>done</em></li>
+            <li class="is-done"><span></span>XDP data plane: L2 and IP-in-IP <em>done</em></li>
+            <li class="is-done"><span></span>Conntrack, hot reload, kernel CI <em>done</em></li>
+            <li class="is-doing"><span></span>Real-NIC benchmarks, 10M+ pps goal <em>next</em></li>
           </ol>
-          <p class="feature__stack mono" data-reveal>C · eBPF · XDP · Go · pktgen</p>
+          <p class="feature__stack mono" data-reveal>C · eBPF · XDP · Go · cilium/ebpf · GitHub Actions</p>
+          <a class="panel__link feature__link" href="https://github.com/rushabh05/maglev-xdp" target="_blank" rel="noopener" data-reveal>github.com/rushabh05/maglev-xdp <span>↗</span></a>
         </div>
         <div class="mg" data-viz="maglev" data-reveal>
           <div class="mg__canvas"><canvas class="viz-canvas" aria-label="Interactive Maglev load-balancer simulation: packets are hashed into a 53-slot table and forwarded to five backends"></canvas></div>
@@ -293,7 +294,7 @@
             <button type="button" data-be="4" aria-pressed="false" style="--c:#7af0d1">be-5</button>
             <span class="mg__stat mono" data-mg-stat aria-live="polite">53 slots · 5 backends up</span>
           </div>
-          <p class="mg__note mono">This runs the real Maglev table-population algorithm in your browser. The eBPF data plane is what's in progress.</p>
+          <p class="mg__note mono">The same table-population algorithm as the Go control plane, running in your browser with 53 slots instead of 65,537.</p>
         </div>
       </div>
     </section>
