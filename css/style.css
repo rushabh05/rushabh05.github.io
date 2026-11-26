@@ -361,7 +361,8 @@ section { position: relative; }
 .feature__road li.is-doing span { border-color: var(--accent); background: linear-gradient(90deg, var(--accent) 50%, transparent 50%); }
 .feature__road em { font-family: var(--f-mono); font-style: normal; font-size: 10px; text-transform: uppercase; color: var(--accent); margin-left: auto; }
 .feature__stack { margin-top: 28px; }
-.feature__link { margin-top: 16px; font-size: 12px; }
+.feature__links { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 10px 22px; }
+.feature__link { margin-top: 0; font-size: 12px; }
 .mg { border: 1px solid var(--line-2); border-radius: 18px; background: rgba(8, 9, 11, 0.92); overflow: hidden; }
 .mg__canvas { position: relative; aspect-ratio: 16 / 9.4; }
 .mg__bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 12px 14px; border-top: 1px solid var(--line); }

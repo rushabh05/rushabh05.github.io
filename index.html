@@ -268,20 +268,25 @@
       </div>
       <div class="feature__grid">
         <div class="feature__copy">
-          <p class="feature__lede" data-reveal>An L4 load balancer on eBPF/XDP. A Go control plane builds Maglev consistent-hashing tables; a C program at the XDP hook picks each packet's backend and forwards it before the network stack ever sees it.</p>
+          <p class="feature__lede" data-reveal>An L4 load balancer on eBPF/XDP. A Go control plane builds Maglev consistent-hashing tables; a C program at the XDP hook picks each packet's backend and forwards it before the network stack ever sees it. In-kernel Count-Min and HyperLogLog sketches, with known error bounds, spot flooding sources and drop them at the same hook.</p>
           <ul class="feature__specs" data-reveal>
             <li><b>10.2%</b><span>of flows moved when 1 of 10 backends failed. <code>hash mod N</code> moved 90%</span></li>
             <li><b>0</b><span>of 511 at-risk connections moved when a backend joined, thanks to connection tracking</span></li>
-            <li><b>~2 ms</b><span>to rebuild and hot-swap the table on <code>SIGHUP</code>, no restart</span></li>
+            <li><b>0.07%</b><span>of all traffic: the most a source's count is overestimated, at 99.3% confidence. Proved, and it held for all 3.06M estimates</span></li>
+            <li><b>1.0</b><span>precision and recall flagging flooders in tests; confirmed ones are dropped in XDP</span></li>
           </ul>
           <ol class="feature__road" data-reveal>
             <li class="is-done"><span></span>Maglev table in Go, 65,537 slots <em>done</em></li>
             <li class="is-done"><span></span>XDP data plane: L2 and IP-in-IP <em>done</em></li>
-            <li class="is-done"><span></span>Conntrack, hot reload, kernel CI <em>done</em></li>
+            <li class="is-done"><span></span>Conntrack, ~2 ms hot reload, kernel CI <em>done</em></li>
+            <li class="is-done"><span></span>Flood detection with sketches + proofs <em>done</em></li>
             <li class="is-doing"><span></span>Real-NIC benchmarks, 10M+ pps goal <em>next</em></li>
           </ol>
-          <p class="feature__stack mono" data-reveal>C · eBPF · XDP · Go · cilium/ebpf · GitHub Actions</p>
-          <a class="panel__link feature__link" href="https://github.com/rushabh05/maglev-xdp" target="_blank" rel="noopener" data-reveal>github.com/rushabh05/maglev-xdp <span>↗</span></a>
+          <p class="feature__stack mono" data-reveal>C · eBPF · XDP · Go · Count-Min · HyperLogLog</p>
+          <div class="feature__links" data-reveal>
+            <a class="panel__link feature__link" href="https://github.com/rushabh05/maglev-xdp" target="_blank" rel="noopener">github.com/rushabh05/maglev-xdp <span>↗</span></a>
+            <a class="panel__link feature__link" href="https://github.com/rushabh05/maglev-xdp/blob/main/docs/MATH.md" target="_blank" rel="noopener">The maths: proofs <span>↗</span></a>
+          </div>
         </div>
         <div class="mg" data-viz="maglev" data-reveal>
           <div class="mg__canvas"><canvas class="viz-canvas" aria-label="Interactive Maglev load-balancer simulation: packets are hashed into a 53-slot table and forwarded to five backends"></canvas></div>
